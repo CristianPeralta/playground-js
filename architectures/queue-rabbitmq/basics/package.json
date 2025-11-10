@@ -1,0 +1,20 @@
+{
+  "name": "rabbitmq-basics",
+  "version": "1.0.0",
+  "description": "Basic RabbitMQ examples with Node.js",
+  "type": "module",
+  "scripts": {
+    "start:producer": "node producer.js",
+    "start:consumer": "node consumer.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["rabbitmq", "message-queue", "nodejs"],
+  "engines": {
+    "node": "22.x"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "amqplib": "0.10.3",
+    "dotenv": "16.0.3"
+  }
+}
