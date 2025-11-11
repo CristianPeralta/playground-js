@@ -1,0 +1,31 @@
+{
+  "name": "rabbitmq-rpc",
+  "version": "1.0.0",
+  "description": "RabbitMQ RPC (Remote Procedure Call) Example with temporary queues",
+  "main": "src/rpc-server.js",
+  "type": "module",
+  "scripts": {
+    "start:server": "node src/rpc-server.js",
+    "start:client": "node src/rpc-client.js",
+    "dev:server": "node --watch src/rpc-server.js",
+    "dev:client": "node --watch src/rpc-client.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "keywords": [
+    "rabbitmq",
+    "rpc",
+    "message-queue",
+    "remote-procedure-call",
+    "nodejs"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "amqplib": "0.10.3",
+    "dotenv": "16.0.3",
+    "uuid": "9.0.0"
+  }
+}
