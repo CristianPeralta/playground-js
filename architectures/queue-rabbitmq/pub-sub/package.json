@@ -1,0 +1,33 @@
+{
+  "name": "rabbitmq-pub-sub",
+  "version": "1.0.0",
+  "description": "RabbitMQ Publish/Subscribe example with Node.js",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start:subscriber": "node src/subscriber.js",
+    "start:publisher": "node src/publisher.js",
+    "start:api": "node src/api/server.js",
+    "dev:subscriber": "node --watch src/subscriber.js",
+    "dev:publisher": "node --watch src/publisher.js",
+    "dev:api": "node --watch src/api/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": "22.x"
+  },
+  "keywords": [
+    "rabbitmq",
+    "pub-sub",
+    "publish-subscribe",
+    "message-broker",
+    "nodejs"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "amqplib": "0.10.3",
+    "dotenv": "16.3.1",
+    "express": "4.18.2"
+  }
+}
