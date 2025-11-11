@@ -1,0 +1,27 @@
+{
+  "name": "rabbitmq-routing",
+  "version": "1.0.0",
+  "description": "RabbitMQ Routing Example",
+  "main": "src/publisher.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/publisher.js",
+    "subscriber": "node src/subscriber.js",
+    "dev": "node --watch src/publisher.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": "22.x"
+  },
+  "keywords": [
+    "rabbitmq",
+    "message-queue",
+    "routing",
+    "nodejs"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "amqplib": "0.10.3",
+    "dotenv": "16.0.3"
+  }
+}
