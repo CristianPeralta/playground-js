@@ -1,31 +1,75 @@
 version: '3.8'
 services:
   rabbitmq:
-    image: rabbitmq:3-management
+    image: rabbitmq:3.12-management
+    container_name: rabbitmq-microservices-demo
     ports:
       - "5672:5672"
       - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    networks:
+      - microservices_net
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - microservices_net
+
   auth:
     build: ./auth
     ports:
       - "3001:3001"
     env_file:
-      - ./auth/.env
+      - ./auth/.env.example
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - microservices_net
+
   payments:
     build: ./payments
     ports:
       - "3002:3002"
     env_file:
-      - ./payments/.env
+      - ./payments/.env.example
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - microservices_net
+
   notifications:
     build: ./notifications
     ports:
       - "3003:3003"
     env_file:
-      - ./notifications/.env
+      - ./notifications/.env.example
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - microservices_net
+
+networks:
+  microservices_net:
+    driver: bridge
+
+volumes:
+  rabbitmq_data:
