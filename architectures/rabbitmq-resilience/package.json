@@ -1,0 +1,20 @@
+{
+  "name": "rabbitmq-resilience",
+  "version": "1.0.0",
+  "type": "module",
+  "engines": {
+    "node": "22.21.0"
+  },
+  "scripts": {
+    "producer": "node src/producer.js",
+    "consumer": "node src/consumer.js",
+    "dlq-consumer": "node src/dlq-consumer.js",
+    "send:ok": "node src/producer.js \"ok-$(date +%s%3N)\"",
+    "send:fail": "node src/producer.js \"fail-$(date +%s%3N)\"",
+    "send:many-fails": "bash -c 'n=${N:-5}; for i in $(seq 1 $n); do node src/producer.js \"fail-$(date +%s%3N)-$i\"; sleep 0.15; done'"
+  },
+  "dependencies": {
+    "amqplib": "0.10.4",
+    "dotenv": "16.4.5"
+  }
+}
