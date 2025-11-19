@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  zookeeper:
+    image: bitnami/zookeeper:3.8
+    ports:
+      - "2181:2181"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+
+  kafka:
+    image: bitnami/kafka:3.6
+    ports:
+      - "9092:9092"
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:9092
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    depends_on:
+      - zookeeper
+    networks:
+      - kafkanet
+
+  producer:
+    image: node:22.21
+    working_dir: /app
+    command: ["node", "src/producer.js"]
+    volumes:
+      - ./:/app
+    environment:
+      - NODE_ENV=development
+      - KAFKA_BROKER=kafka:9092
+      - KAFKA_MAIN_TOPIC=${KAFKA_MAIN_TOPIC}
+      - KAFKA_DLQ_TOPIC=${KAFKA_DLQ_TOPIC}
+      - FAILURE_PROBABILITY=${FAILURE_PROBABILITY}
+      - RETRY_MAX_ATTEMPTS=${RETRY_MAX_ATTEMPTS}
+      - RETRY_BACKOFF_MS=${RETRY_BACKOFF_MS}
+      - CLIENT_ID=producer-node
+      - GROUP_ID=producer-group
+    depends_on:
+      - kafka
+    networks:
+      - kafkanet
+
+  consumer:
+    image: node:22.21
+    working_dir: /app
+    command: ["node", "src/consumer.js"]
+    volumes:
+      - ./:/app
+    environment:
+      - NODE_ENV=development
+      - KAFKA_BROKER=kafka:9092
+      - KAFKA_MAIN_TOPIC=${KAFKA_MAIN_TOPIC}
+      - KAFKA_DLQ_TOPIC=${KAFKA_DLQ_TOPIC}
+      - FAILURE_PROBABILITY=${FAILURE_PROBABILITY}
+      - RETRY_MAX_ATTEMPTS=${RETRY_MAX_ATTEMPTS}
+      - RETRY_BACKOFF_MS=${RETRY_BACKOFF_MS}
+      - CLIENT_ID=consumer-node
+      - GROUP_ID=${GROUP_ID}
+    depends_on:
+      - kafka
+    networks:
+      - kafkanet
+
+  dlq-consumer:
+    image: node:22.21
+    working_dir: /app
+    command: ["node", "src/dlq-consumer.js"]
+    volumes:
+      - ./:/app
+    environment:
+      - NODE_ENV=development
+      - KAFKA_BROKER=kafka:9092
+      - KAFKA_MAIN_TOPIC=${KAFKA_MAIN_TOPIC}
+      - KAFKA_DLQ_TOPIC=${KAFKA_DLQ_TOPIC}
+      - CLIENT_ID=dlq-node
+      - GROUP_ID=dlq-group
+    depends_on:
+      - kafka
+    networks:
+      - kafkanet
+
+networks:
+  kafkanet:
