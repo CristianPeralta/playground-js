@@ -63,26 +63,32 @@ kafka-environment/
 
 A preconfigured local Kafka environment that includes:
 
-* Zookeeper
-* Kafka broker
-* Optional UI: Kafka UI or Redpanda Console
+* Zookeeper (`confluentinc/cp-zookeeper:7.3.0`)
+* Kafka broker (`confluentinc/cp-kafka:7.3.0`)
+* Kafka UI (`provectuslabs/kafka-ui:latest`) at `http://localhost:8080`
 * Reusable configuration across all subprojects
 * Clean and simple development setup
 
-Every subproject connects to the same Kafka instance.
+Key ports:
+
+* `2181` → ZooKeeper
+* `9092` → Kafka (external, for your apps: `localhost:9092`)
+* `29092` → Kafka (internal, used by Docker services: `kafka:29092`)
+* `8080` → Kafka UI
+
+Every subproject connects to the same Kafka instance using `localhost:9092`.
 
 ### **reset.sh**
 
-A helper script to fully reset Kafka:
+A helper script to restart the Kafka stack from the `kafka-environment/` folder:
 
-* Delete topics
-* Recreate topics
-* Clear logs
-* Restart services
+* Stops the compose stack (`docker compose down -v`)
+* Starts it again (`docker compose up -d`)
 
-Useful when experimenting:
+Useful when experimenting or after changing config:
 
 ```sh
+cd kafka-environment/
 ./reset.sh
 ```
 
