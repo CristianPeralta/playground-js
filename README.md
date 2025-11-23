@@ -11,6 +11,12 @@ A comprehensive collection of JavaScript and Node.js examples, templates, and be
 │   ├── microservices-demo/
 │   ├── queue-rabbitmq/
 │   └── rest-vs-graphql/
+├── core-node/           # Core Node.js concepts and examples
+│   ├── event-loop/     # Event loop and asynchronous patterns
+│   ├── streams/        # Streams and data processing
+│   ├── buffers/        # Working with binary data
+│   ├── worker-threads/ # Parallel processing with worker threads
+│   └── cluster/        # Clustering and process management
 ├── frameworks/          # Framework-specific examples
 │   ├── express/        # Express.js examples
 │   └── nestjs/         # NestJS framework examples
