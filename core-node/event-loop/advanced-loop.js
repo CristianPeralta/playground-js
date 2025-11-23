@@ -62,7 +62,7 @@ function advancedDemo() {
     // --- Close Phase ---
     const server = createServer();
     server.on('close', () => {
-        console.log('<>. [Close] Server closed');
+        console.log('13. [Close] Server closed');
     });
     server.close();
 
