@@ -70,7 +70,8 @@ This demonstrates:
 - Promise callbacks (microtasks).
 - Timers and I/O operations.
 - `setImmediate()` (check phase).
-- Close callbacks from a server.
+- Close callbacks from a cleanly closed server (via `process.nextTick()`).
+- Close callbacks from an abruptly destroyed stream (close callbacks phase).
 
 ## Understanding the Output (Advanced Loop)
 
@@ -100,6 +101,16 @@ This explains why, in the output, you may see:
 - Then Promise microtasks scheduled from inside the `'close'` handler.
 
 Even though the log labels refer to phases for teaching purposes, the exact ordering is consistent with the official description of the event loop, close callbacks, `process.nextTick()`, and Promise microtasks.
+
+### About the "Cycle" Labels in the Logs
+
+In `advanced-loop.js`, each log message includes a conceptual **cycle** label like `[Cycle 0]`, `[Cycle 1]`, or `[Cycle 2]`. These are not official Node.js terms; they are a teaching aid to group operations that happen in the same overall tick/iteration:
+
+- **Cycle 0**: Synchronous script execution and the first wave of `process.nextTick()` and Promise microtasks scheduled from that script.
+- **Cycle 1**: Work scheduled for the next iteration, such as timers (`setTimeout`), `setImmediate()`, and close callbacks from the abruptly destroyed stream.
+- **Cycle 2**: Later I/O completion in the poll phase (for example, the `fs.readFile` callback and its Promise microtask).
+
+These cycle labels are there to make the execution order easier to follow while still respecting the official phase model described above.
 
 ## Best Practices
 
