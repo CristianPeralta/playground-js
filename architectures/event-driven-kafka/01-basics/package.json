@@ -1,0 +1,20 @@
+{
+  "name": "kafka-basics",
+  "version": "1.0.0",
+  "description": "Basic Kafka examples with Node.js (producer & consumer)",
+  "type": "module",
+  "scripts": {
+    "start:producer": "node src/producer.js",
+    "start:consumer": "node src/consumer.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["kafka", "event-driven", "nodejs"],
+  "engines": {
+    "node": "22.x"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "16.0.3",
+    "kafkajs": "2.2.4"
+  }
+}
